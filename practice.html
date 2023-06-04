@@ -1,0 +1,193 @@
+
+<!-- db -->
+
+ 
+<!-- show dbs -->
+
+test> show dbs;
+admin    40.00 KiB
+config  108.00 KiB
+local    40.00 KiB
+
+<!-- createCollection -->
+
+test> db.createCollection("biodata")
+{ ok: 1 }
+test> show dbs;
+admin    40.00 KiB
+config  108.00 KiB
+local    40.00 KiB
+test      8.00 KiB
+
+<!-- use -->.
+
+test> use aryan
+switched to db aryan
+
+<!-- dropdatabase -->
+
+aryan> db.dropDatabase()
+{ ok: 1, dropped: 'aryan' }
+
+<!-- show dbs -->
+
+aryan> show dbs;
+admin    40.00 KiB
+config  108.00 KiB
+local    40.00 KiB
+test      8.00 KiB
+
+<!-- createCollection -->
+
+test> db.createCollection("biodata")
+{ ok: 1 }
+test> show dbs;
+admin    40.00 KiB
+config  108.00 KiB
+local    40.00 KiB
+test      8.00 KiB
+
+
+<!-- uses and drop  -->
+
+test> use aryan
+switched to db aryan
+aryan> db
+aryan
+aryan> db.dropDatabase()
+{ ok: 1, dropped: 'aryan' }
+aryan> db
+aryan
+aryan> show dbs;
+admin    40.00 KiB
+config  108.00 KiB
+local    40.00 KiB
+test      8.00 KiB
+
+
+<!-- 1st create and 2nd create -->
+
+aryan> db.biodata.insertOne({"_id" :1, "name": "rahul", "class" : "10" })
+{ acknowledged: true, insertedId: 1 }
+aryan>
+
+aryan>
+
+aryan> db.biodata.insertMany([{ _id :2, name : "bahadur", age:25 , class:11} ,  {_id : 3, name : "thpapa",  class: 12}])
+{ acknowledged: true, insertedIds: { '0': 2, '1': 3 } }
+aryan> db.biodata.find()
+[
+  { _id: 1, name: 'rahul', class: '10' },
+  { _id: 2, name: 'bahadur', age: 25, class: 11 },
+  { _id: 3, name: 'thpapa', class: 12 }
+]
+aryan>
+
+
+<!-- find() -->
+
+aryan> db.biodata.find()
+[
+  { _id: 1, name: 'rahul', class: '10' },
+  { _id: 2, name: 'bahadur', age: 25, class: 11 },
+  { _id: 3, name: 'thpapa', class: 12 }
+]
+
+
+<!-- pretty() -->
+
+aryan> db.biodata.find()
+[
+  { _id: 1, name: 'rahul', class: '10' },
+  { _id: 2, name: 'bahadur', age: 25, class: 11 },
+  { _id: 3, name: 'thpapa', class: 12 }
+]
+
+
+
+<!-- equal 12 -->
+
+
+aryan> db.biodata.find({class : {$eq : 12} })
+[ { _id: 3, name: 'thpapa', class: 12 } ]
+aryan>
+
+
+<!-- greater than -->
+
+aryan> db.biodata.find({age :  {$gt:12 } } )
+[ { _id: 2, name: 'bahadur', age: 25, class: 11 } ]
+
+
+<!-- gte -->
+aryan> db.biodata.find({age : {$gte :24}})
+[ { _id: 2, name: 'bahadur', age: 25, class: 11 } ]
+aryan>
+
+
+<!-- less than lt -->
+
+aryan> db.biodata.find({age : {$lt : 26}})
+[ { _id: 2, name: 'bahadur', age: 25, class: 11 } ]
+aryan>
+
+<!-- in hai ki nhi  -->
+aryan> db.biodata.find({age : {$in : [12 , 25]}})
+[ { _id: 2, name: 'bahadur', age: 25, class: 11 } ]
+
+
+  <!-- And -->
+  aryan> db.biodata.find({$and: [{name : "bahadur"}, {age : 25}]} )
+  [ { _id: 2, name: 'bahadur', age: 25, class: 11 } ]
+
+
+  <!-- OR -->
+  aryan> db.biodata.find({$or: [{name : "bahadur"}, {age :25}]})
+[ { _id: 2, name: 'bahadur', age: 25, class: 11 } ]
+
+
+ <!-- equal or find() -->
+
+aryan> db.biodata.find({age : {$not: {$gt:25}}})
+[
+  { _id: 1, name: 'rahul', class: '10' },
+  { _id: 2, name: 'bahadur', age: 25, class: 11 },
+  { _id: 3, name: 'thpapa', class: 12 },
+  { _id: 4, name: 'thapa technical', age: '24', class: '12' }
+]
+aryan> db.biodata.find({name :{$eq : "rahul"}})
+[ { _id: 1, name: 'rahul', class: '10' } ]
+aryan>
+
+<!-- count() or find()-->
+
+aryan> db.biodata.find({age :{$gt : 24}})
+[ { _id: 2, name: 'bahadur', age: 25, class: 11 } ]
+aryan>
+
+
+<!-- sort -->
+
+aryan> db.biodata.find().sort({age : -1})
+[
+  { _id: 4, name: 'thapa technical', age: '24', class: '12' },
+  { _id: 2, name: 'bahadur', age: 25, class: 11 },
+  { _id: 1, name: 'rahul', class: '10' },
+  { _id: 3, name: 'thpapa', class: 12 }
+]
+
+aryan> db.biodata.find().sort({class:-1})
+[
+  { _id: 4, name: 'thapa technical', age: '24', class: '12' },
+  { _id: 1, name: 'rahul', class: '10' },
+  { _id: 3, name: 'thpapa', class: 12 },
+  { _id: 2, name: 'bahadur', age: 25, class: 11 }
+]
+
+<!-- limit (2) -->
+
+aryan> db.biodata.find().sort({class :1}).limit(2)
+[
+  { _id: 2, name: 'bahadur', age: 25, class: 11 },
+  { _id: 3, name: 'thpapa', class: 12 }
+]
