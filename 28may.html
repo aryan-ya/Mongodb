@@ -1,0 +1,166 @@
+
+test> use new_weather_db
+switched to db new_weather_db
+new_weather_db> show collection
+MongoshInvalidInputError: [COMMON-10001] 'collection' is not a valid argument for "show".
+new_weather_db> show collections
+weather_data
+
+
+
+
+<!-- type wale aage -->
+
+new_weather_db> db.weather_data.distinct("type")
+[ 'FM-13', 'SAO' ]
+new_weather_db>
+
+<!--************************* callletters*********************************** -->
+
+new_weather_db> db.weather_data.distinct("callLetters")
+[
+  '0BVZ', '0JSV', '2100', '3DRO', '3DRV', '3EBA', '3EDA',
+  '3EEJ', '3EEK', '3EFI', '3EFQ', '3EGC', '3EGU', '3EHC',
+  '3EHG', '3EHH', '3EIZ', '3EJF', '3EKJ', '3ELE', '3ENZ',
+  '3EOS', '3EOU', '3EPA', '3EQN', '3ERJ', '3ERZ', '3ETZ',
+  '3EWQ', '3EXD', '3EYN', '3EZL', '3FAR', '3FBD', '3FDL',
+  '3FEV', '3FGE', '3FJR', '3FJV', '3FKA', '3FMV', '3FQU',
+  '3FTJ', '3FXH', '3FXI', '3FXS', '3FYO', '3HZL', '4602',
+  '4PKY', '4XIC', '4XII', '4XIL', '4XLU', '4XLZ', '4XMX',
+  '5LFX', '5LJT', '5LLP', '5LOT', '5LOZ', '5LTW', '5LUB',
+  '5LWE', '5LWG', '5LWQ', '5MCB', '5MCN', '5MGC', '5MQI',
+  '5MTS', '5MZH', '5PVN', '6ZAM', '6ZAS', '6ZBM', '6ZCM',
+  '6ZDN', '6ZFM', '6ZHX', '6ZJP', '6ZLH', '6ZRT', '6ZUU',
+  '7FFC', '7JBJ', '7JFY', '7JKS', '7JKY', '7JOB', '7JPI',
+  '7JQI', '7JQX', '7JRZ', '7JSO', '7JSP', '7JTJ', '7JTN',
+  '7JUI', '7JVM',
+  ... 2548 more items
+]
+new_weather_db>
+
+<!--******************************* type sao************************************** -->
+
+new_weather_db> db.weather_data.distinct("type")
+[ 'FM-13', 'SAO' ]
+
+<!--***************************** count sao *****************************************-->
+
+new_weather_db> db.weather_data.find({type : 'SAO'}).count()
+6
+new_weather_db>
+
+
+<!--***************************** count $ne****************************************** -->
+
+new_weather_db> db.weather_data.find({type: {$ne:'FM-13'}}).count()
+6
+new_weather_db>
+
+
+<!-- ****************************dewpointcount************************************* -->
+
+new_weather_db> db.weather_data.find({"dewPoint.value": {$lt : 999
+  ... }}).count()
+  4877
+
+
+<!-- ************************elevation count*****************************************  -->
+
+new_weather_db> db.weather_data.updateMany({type : 'SAO'},{$set: {elevation:5000}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 6,
+  modifiedCount: 6,
+  upsertedCount: 0
+}
+
+new_weather_db> db.weather_data.find({$and: [{elevation: {$lt : 8000}},{elevation : {$gt : 1000}}]}).count()
+6
+new_weather_db>
+
+
+
+<!-- ******************callLetters find() ***************************-->
+
+
+new_weather_db> db.weather_data.distinct("callLetters")
+[
+  '0BVZ', '0JSV', '2100', '3DRO', '3DRV', '3EBA', '3EDA',
+  '3EEJ', '3EEK', '3EFI', '3EFQ', '3EGC', '3EGU', '3EHC',
+  '3EHG', '3EHH', '3EIZ', '3EJF', '3EKJ', '3ELE', '3ENZ',
+  '3EOS', '3EOU', '3EPA', '3EQN', '3ERJ', '3ERZ', '3ETZ',
+  '3EWQ', '3EXD', '3EYN', '3EZL', '3FAR', '3FBD', '3FDL',
+  '3FEV', '3FGE', '3FJR', '3FJV', '3FKA', '3FMV', '3FQU',
+  '3FTJ', '3FXH', '3FXI', '3FXS', '3FYO', '3HZL', '4602',
+  '4PKY', '4XIC', '4XII', '4XIL', '4XLU', '4XLZ', '4XMX',
+  '5LFX', '5LJT', '5LLP', '5LOT', '5LOZ', '5LTW', '5LUB',
+  '5LWE', '5LWG', '5LWQ', '5MCB', '5MCN', '5MGC', '5MQI',
+  '5MTS', '5MZH', '5PVN', '6ZAM', '6ZAS', '6ZBM', '6ZCM',
+  '6ZDN', '6ZFM', '6ZHX', '6ZJP', '6ZLH', '6ZRT', '6ZUU',
+  '7FFC', '7JBJ', '7JFY', '7JKS', '7JKY', '7JOB', '7JPI',
+  '7JQI', '7JQX', '7JRZ', '7JSO', '7JSP', '7JTJ', '7JTN',
+  '7JUI', '7JVM',
+  ... 2548 more items
+]
+
+<!--********************************* callLetters count *********************************-->
+
+new_weather_db> db.weather_data.find({callLetters: {$in : ['3EWQ','3EXD','3EYN']}}).count()
+9
+new_weather_db>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
